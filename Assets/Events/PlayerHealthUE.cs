@@ -1,18 +1,19 @@
-using System;
 using UnityEngine;
+using UnityEngine.Events;
 
-public class PlayerHealth : MonoBehaviour
+public class PlayerHealthUE : MonoBehaviour
 {
     public int maxHealth = 100;
     public int currentHealth;
 
-    public event Action<int> OnHealthChanged;
-    public event Action OnDeath;
+    [Header("Unity Events")]
+    public UnityEvent<int> OnHealthChanged;
+    public UnityEvent OnDeath;
 
     void Start()
     {
         currentHealth = maxHealth;
-        OnHealthChanged?.Invoke(currentHealth);
+        OnHealthChanged.Invoke(currentHealth);
     }
 
     public void TakeDamage(int damage)
@@ -22,11 +23,12 @@ public class PlayerHealth : MonoBehaviour
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
 
-        OnHealthChanged?.Invoke(currentHealth);
+        OnHealthChanged.Invoke(currentHealth);
 
         if (currentHealth == 0)
         {
-            OnDeath?.Invoke();
+            OnDeath.Invoke();
         }
     }
 }
+
